@@ -32,195 +32,325 @@
 	THE SOFTWARE.
 */
 
+
+/**
+ *https://github.com/allmarkedup/jQuery-URL-Parser
+ */
+function getHostname(str) {
+    var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+    return str.match(re)[1].toString();
+}
+
+/**
+ *
+ */
+
+var URL = (function (a) {
+    return {
+        // create a querystring from a params object
+        serialize: function (params) { 
+            var key, query = [];
+            for (key in params) {
+                query.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
+            }
+            return query.join('&');
+        },
+
+        // create a params object from a querystring
+        unserialize: function (query) {
+            var pair, params = {};
+            query = query.replace(/^\?/, '').split(/&/);
+            for (pair in query) {
+                pair = query[pair].split('=');
+                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+            }
+            return params;
+        },
+
+        parse: function (url) {
+            a.href = url;
+            return {
+                // native anchor properties
+                hash: a.hash,
+                host: a.host,
+                hostname: a.hostname,
+                href: url,
+                pathname: a.pathname,
+                port: a.port,
+                protocol: a.protocol,
+                search: a.search,
+                // added properties
+                file: a.pathname.split('/').pop(),
+                params: URL.unserialize(a.search)
+            };
+        }
+    };
+}(document.createElement('a')));
+
+/**
+ *
+ */
+
+
+/**
+ * Retourne un hash pour une url
+ * Ce hash correspond à la clef du lien il sera utiliser pour maintenir
+ * une coherence
+ */
+function computeCheckSum (url) {
+    // http://pajhome.org.uk/crypt/md5/
+    var hostname = getHostname (url);
+}
+
+/**
+ *
+ */
+
+var bookmarkbox = ["One", "two", "three", "four", "five"];
+
+
+
 /*  Clock  *\
 \*=========*/
 function updateClock() {
-	var currentTime = new Date ();
-	var currentHours = currentTime.getHours ();
-	var currentMinutes = currentTime.getMinutes ();
-	var currentSeconds = currentTime.getSeconds ();
+    var currentTime = new Date ();
+    var currentHours = currentTime.getHours ();
+    var currentMinutes = currentTime.getMinutes ();
+    var currentSeconds = currentTime.getSeconds ();
 
-	// Pad the minutes and seconds with leading zeros, if required
-	currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
-	currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+    // Pad the minutes and seconds with leading zeros, if required
+    currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+    currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
 
-	// Choose either "AM" or "PM" as appropriate
-	var timeOfDay = (currentHours < 12) ? "AM" : "PM";
+    // Choose either "AM" or "PM" as appropriate
+    var timeOfDay = (currentHours < 12) ? "AM" : "PM";
 
-	// Convert the hours component to 12-hour format if needed
-	currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
+    // Convert the hours component to 12-hour format if needed
+    currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
 
-	// Convert an hours component of "0" to "12"
-	currentHours = (currentHours == 0) ? 12 : currentHours;
+    // Convert an hours component of "0" to "12"
+    currentHours = (currentHours == 0) ? 12 : currentHours;
 
-	// Compose the string for display
-	var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+    // Compose the string for display
+    var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
 
-	// Fill '#clock' div with time
-	$("#clock").html(currentTimeString);
+    // Fill '#clock' div with time
+    $("#clock").html(currentTimeString);
 }
 
 $(document).ready(function() {
-	
-	/*  Get Links  *\
-	\*=============*/
-	var linkString = $('body').text();
+    $('body').empty();
 
-	/*  Clear Page  *\
-	\*==============*/
-	$('body').empty();
+    var links_table = TAFFY([
+    {
+        name :"google", 
+        box:1,  
+        newwin:true, 
+        link : "http:://www.google.fr", 
+        ckecksum :""
+    },
 
-	/*  Create Array from linkString  *\
-	\*================================*/
-	var linkArray = linkString.split("\n");
+    {
+        name :"deviantArt",
+        box:1, 
+        newwin:true, 
+        link : "http://deviantart.com", 
+        ckecksum :""
+    },
 
-	/*  Go thru Array  *\
-	\*=================*/
-	var i;
-	var count = 1;
-	var html = '';
+    {
+        name :"gitHub",
+        box:1, 
+        newwin:true, 
+        link : "https://github.com/", 
+        ckecksum :""
+    },
 
-	for(i in linkArray) {
+    {
+        name :"Gmail", 
+        box:1, 
+        newwin:true, 
+        link : "https://www.gmail.com/", 
+        ckecksum :""
+    },
 
-		/*  Get line  *\
-		\*============*/
-		var line = jQuery.trim(linkArray[i]);
+    {
+        name :"tootella", 
+        box:1, 
+        newwin:true, 
+        link : "http://www.tootella.org", 
+        ckecksum :""
+    },
 
-		// If line is empty, skip
-		if(!line)
-			continue;
+    {
+        name :"LinuxFr", 
+        box:0, 
+        newwin:true, 
+        link : "https://www.linuxfr.org/", 
+        ckecksum :""
+    },
 
-		/*  If it doesn't contain "://",  *\
-		|*  it's not a URL                *|
-		\*================================*/
-		if(/:\/\//.test(line) != true) {
-			if(count > 1)
-				html = html + '</div>';
-				html = html + '<div class="block"><h1>' + line + '</h1><ul>';
-				count++;
-				continue;
-		}
+    {
+        name :"Reader", 
+        box:2, 
+        newwin:true, 
+        link : "https://reader.google.fr/", 
+        ckecksum :""
+    },
 
-		/*  Split URL and Title  *\
-		\*=======================*/
-		var lineArray = line.split(" || ");
-		var url = lineArray[0];
-		var title = lineArray[1];
+    {
+        name :"Ecran", 
+        box:3, 
+        newwin:true, 
+        link : "http://www.ecrans.fr/", 
+        ckecksum :""
+    },
 
-		/*  Add HTML code  *\
-		\*=================*/
-		if(newwindow)
-			html = html + '<li><a href="' + url + '" target="_blank">' + title + '</a></li>'
-		else
-			html = html + '<li><a href="' + url + '">' + title + '</a></li>'
-	}
+    {
+        name :"Lemonde", 
+        box:4, 
+        newwin:true, 
+        order:1, 
+        link : "http://www.lemonde.fr/", 
+        ckecksum :""
+    },
 
-	/*  Add generated content to page  *\
-	\*=================================*/
-	html = html + '</ul></div>';
-	$('body').append(html);
+    {
+        name :"regexp", 
+        box:4, 
+        order:0, 
+        newwin:true, 
+        link : "http://regexpal.com/", 
+        ckecksum :""
+    }        
+    ]);
+
+    var arrbuffer = [];
+        
+    var ni = bookmarkbox.length;
+        
+    while (ni--) {
+        arrbuffer.push('<div class="block">');
+        arrbuffer.push('<h1 id="h1_'+ ni +'" class="editme">');
+        arrbuffer.push(bookmarkbox[ni]);
+        arrbuffer.push('</h1>');
+        arrbuffer.push('<ul>');
 
 
-	/*  Animation Time!  *\
+        links_table({
+            box:ni
+        }).order("order").each(function (bookmark) {
+            arrbuffer.push('<li><a href="');
+            arrbuffer.push(bookmark.link);
+            arrbuffer.push('"');
+            if (bookmark.newwin) {
+                arrbuffer.push(' target="_blank"');
+            }
+            arrbuffer.push('>');
+            arrbuffer.push(bookmark.name);
+            arrbuffer.push('</a></li>');
+            
+        });
+            
+            
+            
+            
+        arrbuffer.push('</ul>');
+        arrbuffer.push('</div>');
+    }
+        
+
+    $('body').append(arrbuffer.join(""));
+        
+        
+
+        
+        
+
+
+    /*  Animation Time!  *\
 	\*===================*/
 	
-	/*  Hide lists  *\
+    /*  Hide lists  *\
 	\*==============*/
-	$('ul').slideUp();
+    $('ul').slideUp();
 
-	/*  Show on hover  *\
+    /*  Show on hover  *\
 	\*=================*/
-	$('.block').mouseenter(function() {
-		$('ul', this).slideDown();
-	});
+    $('.block').mouseenter(function() {
+        $('ul', this).slideDown();
+    });
 
-	/*  Hide on unhover  *\
+    /*  Hide on unhover  *\
 	\*===================*/
-	$('.block').mouseleave(function() {
-		$('ul', this).slideUp();
-	});
+    $('.block').mouseleave(function() {
+        $('ul', this).slideUp();
+    });
 
 
-	/*  Search Engines  *\
+    /*  Search Engines  *\
 	\*==================*/
 
-	var search = '<div id="searches">';
+    var search = '<div id="searches">';
 	
-	if(google) {
-		var search = search + '<form method="get" action="http://www.google.com/search">',
-		    search = search + '<input type="text" id="g" name="q" size="34" maxlength="255" value="" />',
-		    search = search + '<input type="submit" value="Google" />',
-		    search = search + '</form>';
-	  }
+    var search = search + '<form onsubmit="return doSearch(this)">';
+    search = search + '<input type="text" id="g" name="query" size="34" maxlength="255" value="" />';
+    search = search + '<input type="submit" value="Recherche" />';
+    search = search + '</form>';
+    var search = search + '</div>';
 
-	if(googleimages) {
-		var search = search + '<form method="get" action="http://www.google.com/images">',
-		    search = search + '<input type="text" id="i" name="q" size="27" maxlength="255" value="" />',
-		    search = search +	'<input type="submit" value="Google Images" />',
-		    search = search + '</form>';
-	}
-
-	if(yahoo) {
-		var search = search + '<form method="get" action="http://search.yahoo.com/search">',
-		    search = search + '<input type="text" id="y" name="p" size="35" maxlength="255" value="" />',
-		    search = search +	'<input type="submit" value="Yahoo" />',
-		    search = search + '</form>';
-	}
-
-	if(wikipedia) {
-		var search = search + '<form method="get" action="http://www.wikipedia.org/w/index.php">',
-		    search = search + '<input type="text" id="w" name="search" size="31" maxlength="255" value="" />',
-		    search = search +	'<input type="submit" value="Wikipedia" />',
-		    search = search + '</form>';
-	}
-
-	if(dictcc) {
-		var search = search + '<form method="get" action="http://www.dict.cc/">',
-		    search = search + '<input type="text" id="dcc" name="s" size="33" maxlength="255" value="" />',
-		    search = search +	'<input type="submit" value="dict.cc" />',
-		    search = search + '</form>';
-	}
-
-	if(leo) {
-		var search = search + '<form method="get" action="http://dict.leo.org/">',
-		    search = search + '<input type="text" id="l" name="search" size="37" maxlength="255" value="" />',
-		    search = search +	'<input type="submit" value="leo" />',
-		    search = search + '</form>';
-	}
-
-	if(flickr) {
-		var search = search + '<form method="get" action="http://www.flickr.com/search">',
-		    search = search + '<input type="text" id="da" name="q" size="34" maxlength="255" value="" />',
-		    search = search +	'<input type="submit" value="flickr" />',
-		    search = search + '</form>';
-	}
-
-	if(deviantart) {
-		var search = search + '<form method="get" action="http://browse.deviantart.com/">',
-		    search = search + '<input type="text" id="da" name="q" size="30" maxlength="255" value="" />',
-		    search = search +	'<input type="submit" value="deviantART" />',
-		    search = search + '</form>';
-	}
-
-	var search = search + '</div>';
-
-	/*  Add to page  *\
+    /*  Add to page  *\
 	\*===============*/
-	$('body').append(search);
-	if(focusSearch) {
-		var searchDiv = document.getElementById ('searches');
-		$(searchDiv.firstChild.firstChild).focus();
-	}
+    $('body').append(search);
+    if(focusSearch) {
+        var searchDiv = document.getElementById ('searches');
+        $(searchDiv.firstChild.firstChild).focus();
+    }
  
-	/*  Clock  *\
+    /*  Clock  *\
 	\*=========*/
 
-	if(showClock) {
-		// Add empty '#clock' div
-		$('body').append('<div id="clock"></div>');
+    if(showClock) {
+        // Add empty '#clock' div
+        $('body').append('<div id="clock"></div>');
 
-		// Update clock
-   	setInterval('updateClock()', 1000);
-	}
+        // Update clock
+        setInterval('updateClock()', 1000);
+    }
+
+    /**
+ * 
+ * 
+ */
+    $("h1.editme").click(function() {
+        //This if statement checks to see if there are 
+        //and children of div.editme are input boxes. If so,
+        //we don't want to do anything and allow the user
+        //to continue typing
+        if ($(this).children('input').length == 0) {
+		
+            //Create the HTML to insert into the div. Escape any " characters 
+            var inputbox = "<input type='text' id='"+ $(this).attr('id') + "' class='inputbox' value=\""+$(this).text()+"\">";
+			
+            //Insert the HTML into the div
+            $(this).html(inputbox);
+			
+            //Immediately give the input box focus. The user
+            //will be expecting to immediately type in the input box,
+            //and we need to give them that ability
+            $("input.inputbox").focus();
+			
+            //Once the input box loses focus, we need to replace the
+            //input box with the current text inside of it.
+            $("input.inputbox").blur(function() {
+                console.log ("---" + $(this).attr('id') + "---");
+                var value = $(this).val();
+                var dest="h1#" + $(this).attr('id');
+                console.log(dest);
+                $(dest).text(value);
+            //$(".editme").text(value);
+            });
+        }
+    });
 
 });
