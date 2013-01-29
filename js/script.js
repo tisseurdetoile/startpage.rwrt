@@ -141,106 +141,27 @@ function updateClock() {
 $(document).ready(function() {
     $('body').empty();
 
-    var links_table = TAFFY([
-    {
-        name :"google", 
-        box:1,  
-        newwin:true, 
-        link : "http:://www.google.fr", 
-        ckecksum :""
-    },
-
-    {
-        name :"deviantArt",
-        box:1, 
-        newwin:true, 
-        link : "http://deviantart.com", 
-        ckecksum :""
-    },
-
-    {
-        name :"gitHub",
-        box:1, 
-        newwin:true, 
-        link : "https://github.com/", 
-        ckecksum :""
-    },
-
-    {
-        name :"Gmail", 
-        box:1, 
-        newwin:true, 
-        link : "https://www.gmail.com/", 
-        ckecksum :""
-    },
-
-    {
-        name :"tootella", 
-        box:1, 
-        newwin:true, 
-        link : "http://www.tootella.org", 
-        ckecksum :""
-    },
-
-    {
-        name :"LinuxFr", 
-        box:0, 
-        newwin:true, 
-        link : "https://www.linuxfr.org/", 
-        ckecksum :""
-    },
-
-    {
-        name :"Reader", 
-        box:2, 
-        newwin:true, 
-        link : "https://reader.google.fr/", 
-        ckecksum :""
-    },
-
-    {
-        name :"Ecran", 
-        box:3, 
-        newwin:true, 
-        link : "http://www.ecrans.fr/", 
-        ckecksum :""
-    },
-
-    {
-        name :"Lemonde", 
-        box:4, 
-        newwin:true, 
-        order:1, 
-        link : "http://www.lemonde.fr/", 
-        ckecksum :""
-    },
-
-    {
-        name :"regexp", 
-        box:4, 
-        order:0, 
-        newwin:true, 
-        link : "http://regexpal.com/", 
-        ckecksum :""
-    }        
-    ]);
-
     var arrbuffer = [];
         
-    var ni = bookmarkbox.length;
-        
-    while (ni--) {
+    system.datas({
+        'type':TABS
+    }).order('tabid').each(function (tabs) {
         arrbuffer.push('<div class="block">');
-        arrbuffer.push('<h1 id="h1_'+ ni +'" class="editme">');
-        arrbuffer.push(bookmarkbox[ni]);
+        arrbuffer.push('<h1 id="h1_'+ tabs.tabid +'" class="editme">');
+        arrbuffer.push(tabs.tabname);
         arrbuffer.push('</h1>');
         arrbuffer.push('<ul>');
-
-
-        links_table({
-            box:ni
-        }).order("order").each(function (bookmark) {
-            arrbuffer.push('<li><a href="');
+        
+        system.datas({
+            'type':LINKS,
+            'tab':tabs.tabid
+            }).order("order").each(function (bookmark) {
+            arrbuffer.push('<li>');
+            arrbuffer.push('<a href="Javascript:updateLinks(' + bookmark.___id + ')">');
+            arrbuffer.push('#');
+            arrbuffer.push('</a>');
+            arrbuffer.push('&nbsp;');
+            arrbuffer.push('<a href="');
             arrbuffer.push(bookmark.link);
             arrbuffer.push('"');
             if (bookmark.newwin) {
@@ -251,14 +172,11 @@ $(document).ready(function() {
             arrbuffer.push('</a></li>');
             
         });
-            
-            
-            
-            
+        
         arrbuffer.push('</ul>');
         arrbuffer.push('</div>');
     }
-        
+    )
 
     $('body').append(arrbuffer.join(""));
         
@@ -324,6 +242,7 @@ $(document).ready(function() {
  */
     $("h1.editme").click(function() {
         //This if statement checks to see if there are 
+        //http://www.unleashed-technologies.com/blog/2010/01/13/jquery-javascript-easy-edit-place-input-boxes-and-select-boxes
         //and children of div.editme are input boxes. If so,
         //we don't want to do anything and allow the user
         //to continue typing
@@ -343,12 +262,17 @@ $(document).ready(function() {
             //Once the input box loses focus, we need to replace the
             //input box with the current text inside of it.
             $("input.inputbox").blur(function() {
-                console.log ("---" + $(this).attr('id') + "---");
+                var htmlId = $(this).attr('id');
+                var id = parseInt(htmlId.split("_")[1]);
                 var value = $(this).val();
-                var dest="h1#" + $(this).attr('id');
-                console.log(dest);
+                var dest="h1#" + htmlId;
                 $(dest).text(value);
-            //$(".editme").text(value);
+                system.datas({
+                    'type':TABS,
+                    'tabid':id
+                }).update({
+                    'tabname':value
+                });
             });
         }
     });
