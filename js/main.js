@@ -37,7 +37,6 @@ var system = {
         }
         
         if (boload) {
-            
             if (system.datas().count() === 0) {
                 system.datas.merge (defDatas);
             }

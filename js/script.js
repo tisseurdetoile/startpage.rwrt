@@ -4,12 +4,13 @@
 
 	by Christian Brassat,
 	reusing code by Jukka Svahn
+        update by TisseurDeToile
 */
 
 /**
 	Released under MIT License
 	
-	Copyright (c) 2010 Jukka Svahn, Christian Brassat
+	Copyright (c) 2010 Jukka Svahn, Christian Brassat, Le TisseurDeToile
 	<http://rahforum.biz>
 	<http://crshd.cc>
 
@@ -31,83 +32,6 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
-
-
-/**
- *https://github.com/allmarkedup/jQuery-URL-Parser
- */
-function getHostname(str) {
-    var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
-    return str.match(re)[1].toString();
-}
-
-/**
- *
- */
-
-var URL = (function (a) {
-    return {
-        // create a querystring from a params object
-        serialize: function (params) { 
-            var key, query = [];
-            for (key in params) {
-                query.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
-            }
-            return query.join('&');
-        },
-
-        // create a params object from a querystring
-        unserialize: function (query) {
-            var pair, params = {};
-            query = query.replace(/^\?/, '').split(/&/);
-            for (pair in query) {
-                pair = query[pair].split('=');
-                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-            }
-            return params;
-        },
-
-        parse: function (url) {
-            a.href = url;
-            return {
-                // native anchor properties
-                hash: a.hash,
-                host: a.host,
-                hostname: a.hostname,
-                href: url,
-                pathname: a.pathname,
-                port: a.port,
-                protocol: a.protocol,
-                search: a.search,
-                // added properties
-                file: a.pathname.split('/').pop(),
-                params: URL.unserialize(a.search)
-            };
-        }
-    };
-}(document.createElement('a')));
-
-/**
- *
- */
-
-
-/**
- * Retourne un hash pour une url
- * Ce hash correspond à la clef du lien il sera utiliser pour maintenir
- * une coherence
- */
-function computeCheckSum (url) {
-    // http://pajhome.org.uk/crypt/md5/
-    var hostname = getHostname (url);
-}
-
-/**
- *
- */
-
-var bookmarkbox = ["One", "two", "three", "four", "five"];
-
 
 
 /*  Clock  *\
@@ -138,8 +62,98 @@ function updateClock() {
     $("#clock").html(currentTimeString);
 }
 
+/**
+ * Retourne le code HTML correpondant à une entrée de type Lien.
+ * @param {Object} bookmark 
+ */
+function getLinkInList(bookmark) {
+    strLink = [];
+    strLink.push("<a href='Javascript:removelink(\"" + bookmark.___id + "\")'>");
+    strLink.push('-');
+    strLink.push('</a>');                
+    strLink.push("<a href='Javascript:updateLink(\"" + bookmark.___id + "\")'>");
+    strLink.push('#');
+    strLink.push('</a>');
+    strLink.push('&nbsp;');
+    strLink.push('<a href="');
+    strLink.push(bookmark.link);
+    strLink.push('"');
+    if (bookmark.newwin) {
+        strLink.push(' target="_blank"');
+    }
+    strLink.push('>');
+    strLink.push(bookmark.name);
+    strLink.push('</a>');
+            
+    return strLink.join("");
+}
+
+
+/**
+ * retire le lien indiqué de la base et de l'affichage.
+ * @param {String} id ID du lien dans taffy
+ */
+function removelink (id) {
+    system.datas(id).remove();
+    $('li#' + id).remove();
+}
+
+function updateLink (id) {
+    console.log ("ID:" + id);
+    var linkData = system.datas(id).first();
+    var arLink = [];
+    arLink.push(linkData.name);
+    arLink.push(linkData.link);
+    
+   
+    lien.val(arLink.join("_|_"));
+    linkId.val (id);
+    
+    $( "#dialog-form" ).dialog( "open" );
+}
+
 $(document).ready(function() {
-    $('body').empty();
+    lien = $( "#lien" ),
+    linkId = $( "#linkId" ),
+    allFields = $( [] ).add( lien ).add( linkId ),
+    tips = $( ".validateTips" );
+    /**
+ * Dialog
+ */
+    $( "#dialog-form" ).dialog({
+        autoOpen: false,
+        height: 300,
+        width: 350,
+        modal: true,
+        buttons: {
+            "Sauvegarder": function() {
+                var bValid = true;
+                allFields.removeClass( "ui-state-error" );
+                console.log("1>>" + lien.val() + "--" + linkId.val());
+                var arRes = lien.val().split("_|_");
+                console.log("2>>" + arRes[0] + "--" + arRes[1]);
+                system.datas(linkId.val()).update({
+                    "name":arRes[0], 
+                    "link":arRes[1]
+                });
+                
+                var obLi = $('li#' + linkId.val());
+                
+                obLi.empty();
+                obLi.append(getLinkInList(system.datas(linkId.val()).first()))
+                
+                $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
+            allFields.val( "" ).removeClass( "ui-state-error" );
+        }
+    });
+
+
 
     var arrbuffer = [];
         
@@ -155,23 +169,14 @@ $(document).ready(function() {
         system.datas({
             'type':LINKS,
             'tab':tabs.tabid
-            }).order("order").each(function (bookmark) {
-            arrbuffer.push('<li>');
-            arrbuffer.push('<a href="Javascript:updateLinks(' + bookmark.___id + ')">');
-            arrbuffer.push('#');
-            arrbuffer.push('</a>');
-            arrbuffer.push('&nbsp;');
-            arrbuffer.push('<a href="');
-            arrbuffer.push(bookmark.link);
-            arrbuffer.push('"');
-            if (bookmark.newwin) {
-                arrbuffer.push(' target="_blank"');
-            }
-            arrbuffer.push('>');
-            arrbuffer.push(bookmark.name);
-            arrbuffer.push('</a></li>');
+        }).order("order").each(function (bookmark) {
+            arrbuffer.push('<li id="' + bookmark.___id +  '">');
+            arrbuffer.push(getLinkInList (bookmark));
+            arrbuffer.push('</li>');
             
         });
+        
+        // TODO ajouter un lien d'ajout.
         
         arrbuffer.push('</ul>');
         arrbuffer.push('</div>');
@@ -180,11 +185,6 @@ $(document).ready(function() {
 
     $('body').append(arrbuffer.join(""));
         
-        
-
-        
-        
-
 
     /*  Animation Time!  *\
 	\*===================*/
@@ -206,8 +206,7 @@ $(document).ready(function() {
     });
 
 
-    /*  Search Engines  *\
-	\*==================*/
+    /*  Search Engines  */
 
     var search = '<div id="searches">';
 	

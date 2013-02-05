@@ -1,54 +1,67 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <!--
-	Startpage Rewrite
-	==================
+        Startpage Rewrite
+        ==================
 
-	by Christian Brassat,
+        by Christian Brassat,
 -->
 
 <!--
-	Released under MIT License
-	
-	Copyright (c) 2010 Christian Brassat
-	<http://crshd.cc>
+        Released under MIT License
+        
+        Copyright (c) 2010 Christian Brassat
+        <http://crshd.cc>
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
 -->
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="style/style.css" type="text/css" />
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="style/style.css" type="text/css" />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" type="text/css" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
         <script type="text/javascript" src="js/default.js"></script>
-	<script type="text/javascript" src="js/jquery-1.5.min.js"></script>
+        
         <script type="text/javascript" src="js/Taffy.js"></script>
-	<script type="text/javascript" src="settings.js"></script>
+        <script type="text/javascript" src="settings.js"></script>
         <script type="text/javascript" src="js/purl.js"></script>
         <script type="text/javascript" src="js/search.js"></script>
 
-                <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
         <script type="text/javascript" src="js/script.js"></script>
-<!-- Page Title -->
-	<title>Start Page</title>
+        <!-- Page Title -->
+        <title>Start Page</title>
 
-</head>
-<body>
-</body>
+    </head>
+    <body>
+
+        <div id="dialog-form" title="Modifier un lien">
+            <form>
+                <fieldset>
+                    <label for="name">Lien</label>
+                    <input type="text" name="lien" id="lien" class="text ui-widget-content ui-corner-all" />
+                    <input type="hidden" name="linkId" id="linkId" />
+                </fieldset>
+            </form>
+        </div>    
+    </body>
 </html>
