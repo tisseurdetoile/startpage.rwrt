@@ -122,6 +122,6 @@ var defDatas = [
     {type : 3,"short":"g","name":"google","url":"http://www.google.com/search","params":"q","def":true},
     {type : 3,"short":"gi","name":"google","url":"http://www.google.com/images","params":"q"},
     {type : 3,"short":"yo","name":"Yahoo","url":"http://search.yahoo.com/search","params":"p"},
-    {type : 3,"short":"w","name":"Wikipedia","url":"http://www.wikipedia.org/w/index.php","params":"w"}
+    {type : 3,"short":"w","name":"Wikipedia","url":"http://www.wikipedia.org/w/index.php","params":"search"}
 
 ];

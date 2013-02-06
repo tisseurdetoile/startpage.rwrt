@@ -13,6 +13,7 @@
 	Copyright (c) 2010 Jukka Svahn, Christian Brassat, Le TisseurDeToile
 	<http://rahforum.biz>
 	<http://crshd.cc>
+        <http://www.tisseurdetoile.net>
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -67,27 +68,42 @@ function updateClock() {
  * @param {Object} bookmark 
  */
 function getLinkInList(bookmark) {
-    strLink = [];
-    strLink.push("<a href='Javascript:removelink(\"" + bookmark.___id + "\")'>");
-    strLink.push('-');
-    strLink.push('</a>');                
-    strLink.push("<a href='Javascript:updateLink(\"" + bookmark.___id + "\")'>");
-    strLink.push('#');
-    strLink.push('</a>');
-    strLink.push('&nbsp;');
-    strLink.push('<a href="');
-    strLink.push(bookmark.link);
-    strLink.push('"');
+    linksbuff = [];
+    linksbuff.push("<a href='Javascript:removelink(\"" + bookmark.___id + "\")'>");
+    linksbuff.push('-');
+    linksbuff.push('</a>');                
+    linksbuff.push("<a href='Javascript:updateLink(\"" + bookmark.___id + "\")'>");
+    linksbuff.push('#');
+    linksbuff.push('</a>');
+    linksbuff.push('&nbsp;');
+    linksbuff.push('<a href="');
+    linksbuff.push(bookmark.link);
+    linksbuff.push('"');
     if (bookmark.newwin) {
-        strLink.push(' target="_blank"');
+        linksbuff.push(' target="_blank"');
     }
-    strLink.push('>');
-    strLink.push(bookmark.name);
-    strLink.push('</a>');
+    linksbuff.push('>');
+    linksbuff.push(bookmark.name);
+    linksbuff.push('</a>');
             
-    return strLink.join("");
+    return linksbuff.join("");
 }
 
+
+// TODO renommer les array en buff 
+
+/**
+ *
+ */
+function getLiForBookmark(bookmark) {
+    liBuff = [];        
+
+    liBuff.push('<li>');
+    liBuff.push(getLinkInList (bookmark));
+    liBuff.push('</li>');
+    
+    return (liBuff.join(""));
+}
 
 /**
  * retire le lien indiqué de la base et de l'affichage.
@@ -98,13 +114,35 @@ function removelink (id) {
     $('li#' + id).remove();
 }
 
+/**
+ *
+ */
+function createLink (idTab) {
+    var link = {
+        type : 1, 
+        name :"NomDuLien", 
+        tab:parseInt(idTab), 
+        newwin:true, 
+        link : "http://www.perdu.com"
+    };
+    var req = system.datas.insert(link);
+    var newBookmark = req.first();
+
+    lastLi = $('li#li_' + idTab);
+    
+    lastLi.before(getLiForBookmark(newBookmark));
+    updateLink(newBookmark.___id);
+}
+
+/**
+ *
+ */
 function updateLink (id) {
     console.log ("ID:" + id);
     var linkData = system.datas(id).first();
     var arLink = [];
     arLink.push(linkData.name);
     arLink.push(linkData.link);
-    
    
     lien.val(arLink.join("_|_"));
     linkId.val (id);
@@ -155,35 +193,42 @@ $(document).ready(function() {
 
 
 
-    var arrbuffer = [];
+    var buffer = [];
         
     system.datas({
         'type':TABS
     }).order('tabid').each(function (tabs) {
-        arrbuffer.push('<div class="block">');
-        arrbuffer.push('<h1 id="h1_'+ tabs.tabid +'" class="editme">');
-        arrbuffer.push(tabs.tabname);
-        arrbuffer.push('</h1>');
-        arrbuffer.push('<ul>');
+        buffer.push('<div class="block">');
+        buffer.push('<h1 id="h1_'+ tabs.tabid +'" class="editme">');
+        buffer.push(tabs.tabname);
+        buffer.push('</h1>');
+        buffer.push('<ul>');
         
         system.datas({
             'type':LINKS,
             'tab':tabs.tabid
         }).order("order").each(function (bookmark) {
-            arrbuffer.push('<li id="' + bookmark.___id +  '">');
-            arrbuffer.push(getLinkInList (bookmark));
-            arrbuffer.push('</li>');
+            //buff.push('<li id="' + bookmark.___id +  '">');
+            //buff.push(getLinkInList (bookmark));
+            //buff.push('</li>');
+            buffer.push(getLiForBookmark(bookmark));
             
         });
         
+        buffer.push('<li id="li_' + tabs.tabid + '" class="new">');
+        buffer.push("<a href='Javascript:createLink(\"" + tabs.tabid + "\")'>");
+        buffer.push('Ajouter');
+        buffer.push('</a>');
+        buffer.push('</li>');
+        
         // TODO ajouter un lien d'ajout.
         
-        arrbuffer.push('</ul>');
-        arrbuffer.push('</div>');
+        buffer.push('</ul>');
+        buffer.push('</div>');
     }
     )
 
-    $('body').append(arrbuffer.join(""));
+    $('body').append(buffer.join(""));
         
 
     /*  Animation Time!  *\
@@ -207,18 +252,17 @@ $(document).ready(function() {
 
 
     /*  Search Engines  */
-
-    var search = '<div id="searches">';
-	
-    var search = search + '<form onsubmit="return doSearch(this)">';
-    search = search + '<input type="text" id="g" name="query" size="34" maxlength="255" value="" />';
-    search = search + '<input type="submit" value="Recherche" />';
-    search = search + '</form>';
-    var search = search + '</div>';
+    var srchBuff = [];
+    srchBuff.push('<div id="searches">');
+    srchBuff.push('<form onsubmit="return doSearch(this)">');
+    srchBuff.push('<input type="text" id="g" name="query" size="34" maxlength="255" value="" />');
+    srchBuff.push('<input type="submit" value="Recherche" />');
+    srchBuff.push('</form>');
+    srchBuff.push('</div>');
 
     /*  Add to page  *\
 	\*===============*/
-    $('body').append(search);
+    $('body').append(srchBuff.join(""));
     if(focusSearch) {
         var searchDiv = document.getElementById ('searches');
         $(searchDiv.firstChild.firstChild).focus();
@@ -236,30 +280,14 @@ $(document).ready(function() {
     }
 
     /**
- * 
- * 
- */
+     * Gestion du changement de nom des blocs de liens
+     */
     $("h1.editme").click(function() {
-        //This if statement checks to see if there are 
-        //http://www.unleashed-technologies.com/blog/2010/01/13/jquery-javascript-easy-edit-place-input-boxes-and-select-boxes
-        //and children of div.editme are input boxes. If so,
-        //we don't want to do anything and allow the user
-        //to continue typing
+
         if ($(this).children('input').length == 0) {
-		
-            //Create the HTML to insert into the div. Escape any " characters 
             var inputbox = "<input type='text' id='"+ $(this).attr('id') + "' class='inputbox' value=\""+$(this).text()+"\">";
-			
-            //Insert the HTML into the div
             $(this).html(inputbox);
-			
-            //Immediately give the input box focus. The user
-            //will be expecting to immediately type in the input box,
-            //and we need to give them that ability
             $("input.inputbox").focus();
-			
-            //Once the input box loses focus, we need to replace the
-            //input box with the current text inside of it.
             $("input.inputbox").blur(function() {
                 var htmlId = $(this).attr('id');
                 var id = parseInt(htmlId.split("_")[1]);
