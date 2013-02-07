@@ -77,19 +77,29 @@ var wsearch = {
      */
     render : function () {
         console.log ("wsearch_render");
+        var jid = '#' + wsearch.RENDERID;
         var srchBuff = [];
         srchBuff.push('<form onsubmit="return wsearch.doSearch(this);return false;">');
         srchBuff.push('<input type="text" id="g" name="query" size="34" maxlength="255" value="" />');
         srchBuff.push('<input type="submit" value="Recherche" />');
         srchBuff.push('</form>');
 
-        $('#searches').append(srchBuff.join(""));
+        $(jid).append(srchBuff.join(""));
     },
 
     init : function () {
         console.log ("wsearch_init");
+        divbuff = [];
+        divbuff.push('<div id="');
+        divbuff.push(wsearch.RENDERID);
+        divbuff.push('">');
+        divbuff.push('</div>');
+        
+        $('body').append(divbuff.join(""));
         wsearch.render();
-    }
+    },
+    
+    RENDERID : "searches"
 };
 
 /**

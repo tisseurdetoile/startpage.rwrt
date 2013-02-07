@@ -5,6 +5,7 @@
 
 var wclock = {
     render : function () {
+        var jid = '#' + wclock.RENDERID;
         var currentTime = new Date ();
         var currentHours = currentTime.getHours ();
         var currentMinutes = currentTime.getMinutes ();
@@ -27,13 +28,24 @@ var wclock = {
         var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
 
         // Fill '#clock' div with time
-        $("#clock").html(currentTimeString);
+        $(jid).html(currentTimeString);
 
     },
     
     init : function () {
         console.log ("wclock_init");
-    }
+        divbuff = [];
+        divbuff.push('<div id="');
+        divbuff.push(wclock.RENDERID);
+        divbuff.push('">');
+        divbuff.push('</div>');
+        
+        $('body').append(divbuff.join(""));
+
+    },
+    
+    RENDERID : "clock"
+    
 }
 
 system.addStartUp(wclock.init);

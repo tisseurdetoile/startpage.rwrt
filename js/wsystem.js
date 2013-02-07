@@ -54,7 +54,7 @@ var system = {
      * lance tout les callbacks
      */
     doCallback : function () {
-        console.log("system_doCallback");
+        //console.log("system_doCallback");
         var ni = system.callbackList.length;
         while (ni--) {
             system.callbackList[ni]();
