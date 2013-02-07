@@ -34,35 +34,6 @@
 	THE SOFTWARE.
 */
 
-
-/*  Clock  *\
-\*=========*/
-function updateClock() {
-    var currentTime = new Date ();
-    var currentHours = currentTime.getHours ();
-    var currentMinutes = currentTime.getMinutes ();
-    var currentSeconds = currentTime.getSeconds ();
-
-    // Pad the minutes and seconds with leading zeros, if required
-    currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
-    currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
-
-    // Choose either "AM" or "PM" as appropriate
-    var timeOfDay = (currentHours < 12) ? "AM" : "PM";
-
-    // Convert the hours component to 12-hour format if needed
-    currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
-
-    // Convert an hours component of "0" to "12"
-    currentHours = (currentHours == 0) ? 12 : currentHours;
-
-    // Compose the string for display
-    var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
-
-    // Fill '#clock' div with time
-    $("#clock").html(currentTimeString);
-}
-
 /**
  * Retourne le code HTML correpondant à une entrée de type Lien.
  * @param {Object} bookmark 
@@ -170,9 +141,7 @@ $(document).ready(function() {
             "Sauvegarder": function() {
                 var bValid = true;
                 allFields.removeClass( "ui-state-error" );
-                console.log("1>>" + lien.val() + "--" + linkId.val());
                 var arRes = lien.val().split("_|_");
-                console.log("2>>" + arRes[0] + "--" + arRes[1]);
                 system.datas(linkId.val()).update({
                     "name":arRes[0], 
                     "link":arRes[1]
@@ -194,12 +163,10 @@ $(document).ready(function() {
         }
     });
 
-
-
     var buffer = [];
         
     system.datas({
-        'type':TABS
+        'type':system.TABS
     }).order('tabid').each(function (tabs) {
         buffer.push('<div class="block">');
         buffer.push('<h1 id="h1_'+ tabs.tabid +'" class="editme">');
@@ -208,14 +175,10 @@ $(document).ready(function() {
         buffer.push('<ul>');
         
         system.datas({
-            'type':LINKS,
+            'type':system.LINKS,
             'tab':tabs.tabid
         }).order("order").each(function (bookmark) {
-            //buff.push('<li id="' + bookmark.___id +  '">');
-            //buff.push(getLinkInList (bookmark));
-            //buff.push('</li>');
             buffer.push(getLiForBookmark(bookmark));
-            
         });
         
         buffer.push('<li id="li_' + tabs.tabid + '" class="new">');
@@ -223,9 +186,6 @@ $(document).ready(function() {
         buffer.push('Ajouter');
         buffer.push('</a>');
         buffer.push('</li>');
-        
-        // TODO ajouter un lien d'ajout.
-        
         buffer.push('</ul>');
         buffer.push('</div>');
     }
@@ -253,31 +213,6 @@ $(document).ready(function() {
         $('ul', this).slideUp();
     });
 
-
-    /*  Search Engines  */
-    var srchBuff = [];
-    srchBuff.push('<div id="searches">');
-    srchBuff.push('<form onsubmit="return doSearch(this)">');
-    srchBuff.push('<input type="text" id="g" name="query" size="34" maxlength="255" value="" />');
-    srchBuff.push('<input type="submit" value="Recherche" />');
-    srchBuff.push('</form>');
-    srchBuff.push('</div>');
-
-    /*  Add to page  *\
-	\*===============*/
-    $('body').append(srchBuff.join(""));
- 
-    /*  Clock  *\
-	\*=========*/
-
-    if(showClock) {
-        // Add empty '#clock' div
-        $('body').append('<div id="clock"></div>');
-
-        // Update clock
-        setInterval('updateClock()', 1000);
-    }
-
     /**
      * Gestion du changement de nom des blocs de liens
      */
@@ -294,7 +229,7 @@ $(document).ready(function() {
                 var dest="h1#" + htmlId;
                 $(dest).text(value);
                 system.datas({
-                    'type':TABS,
+                    'type':system.TABS,
                     'tabid':id
                 }).update({
                     'tabname':value

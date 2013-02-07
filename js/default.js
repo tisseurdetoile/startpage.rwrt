@@ -1,7 +1,9 @@
 var defDatas = [
 {
     type : 0,
-    version : 1
+    version : 2,
+    showclock : 1, 
+    clockPattern : "S[WW] [HH]:[MM]:[SS]"
 },
 {
     type : 2,
@@ -21,7 +23,7 @@ var defDatas = [
 {
     type : 2,
     tabid : 3,
-    tabname : "Quattre"
+    tabname : "Quatre"
 },
 {
     type : 2,
@@ -119,9 +121,38 @@ var defDatas = [
     link : "http://regexpal.com/", 
     ckecksum :""
 },
-    {type : 3,"short":"g","name":"google","url":"http://www.google.com/search","params":"q","def":true},
-    {type : 3,"short":"gi","name":"google","url":"http://www.google.com/images","params":"q"},
-    {type : 3,"short":"yo","name":"Yahoo","url":"http://search.yahoo.com/search","params":"p"},
-    {type : 3,"short":"w","name":"Wikipedia","url":"http://www.wikipedia.org/w/index.php","params":"search"}
+{
+    type : 3,
+    "short":"g",
+    "name":"google",
+    "url":"http://www.google.com/search",
+    "params":"q",
+    "def":true
+},
+{
+    type : 3,
+    "short":"gi",
+    "name":"google",
+    "url":"http://www.google.com/images",
+    "params":"q"
+},
+{
+    type : 3,
+    "short":"yo",
+    "name":"Yahoo",
+    "url":"http://search.yahoo.com/search",
+    "params":"p"
+},
+{
+    type : 3,
+    "short":"w",
+    "name":"Wikipedia",
+    "url":"http://www.wikipedia.org/w/index.php",
+    "params":"search"
+}
 
+];
+
+var from1to2 = [ 
+    { select : { type : 0 }, mod : { version : 2,showclock : 1, clockPattern : "S[WW] [HH]:[MM]:[SS]"}}
 ];

@@ -11,9 +11,9 @@ Cette version tire partie du localstorage avec taffyDB.
 Par défaut 5 conteneur son disponnible, il est possible de les renommer en cliquant
 dessus.
 Les liens :
-    suppression en cliquant sur le (-) qui precede les liens.
-    modification en cliquant sur le (#) qui precede les liens.
-    Les informations du lien apparaissent séparé par _|_ :
+- suppression en cliquant sur le (-) qui precede les liens.
+- modification en cliquant sur le (#) qui precede les liens.
+- Les informations du lien apparaissent séparé par _|_ :
         exemple Nom du lien_|_ Url
 
 ###La barre de recherche
