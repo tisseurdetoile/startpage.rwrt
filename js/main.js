@@ -1,3 +1,7 @@
+/**
+ *
+ */
+
 var system = {
     callbackList : [],
     datas : TAFFY(),
@@ -11,14 +15,7 @@ var system = {
     },
 
     /**
-     * rafraichie l'enssemble des donnée
-     */
-    refresh : function () {
-        system.doCallback();
-    },
-
-    /**
-     * rafraichie l'enssemble des donnée
+     * lance tout les callbacks
      */
     doCallback : function () {
         var ni = system.callbackList.length;
@@ -26,8 +23,10 @@ var system = {
             system.callbackList[ni]();
         }
     },
-    
-    
+
+    /**
+     * charge les données dans le localstorage
+     */
     loadData : function () {
         console.log("system_loadData");       
         boload = system.datas.store("startpage");

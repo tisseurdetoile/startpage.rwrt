@@ -4,7 +4,7 @@
 
 	by Christian Brassat,
 	reusing code by Jukka Svahn
-        update by TisseurDeToile
+        updated by TisseurDeToile
 */
 
 /**
@@ -93,8 +93,9 @@ function getLinkInList(bookmark) {
 // TODO renommer les array en buff 
 
 /**
- *
- */
+ * Retourne le code HTML correpondant à une entrée de type list.
+ * @param {Object} bookmark  
+ * */
 function getLiForBookmark(bookmark) {
     liBuff = [];        
 
@@ -115,7 +116,8 @@ function removelink (id) {
 }
 
 /**
- *
+ * Ajout d'un nouveau lien
+ * Ajout en base avec affichage en modification
  */
 function createLink (idTab) {
     var link = {
@@ -135,7 +137,8 @@ function createLink (idTab) {
 }
 
 /**
- *
+ * Preparation et affichage de la boite de dialogue de modification
+ * @param {string} id Id du lien dans la base
  */
 function updateLink (id) {
     console.log ("ID:" + id);
@@ -161,7 +164,7 @@ $(document).ready(function() {
     $( "#dialog-form" ).dialog({
         autoOpen: false,
         height: 300,
-        width: 350,
+        width: 700,
         modal: true,
         buttons: {
             "Sauvegarder": function() {
@@ -263,10 +266,6 @@ $(document).ready(function() {
     /*  Add to page  *\
 	\*===============*/
     $('body').append(srchBuff.join(""));
-    if(focusSearch) {
-        var searchDiv = document.getElementById ('searches');
-        $(searchDiv.firstChild.firstChild).focus();
-    }
  
     /*  Clock  *\
 	\*=========*/

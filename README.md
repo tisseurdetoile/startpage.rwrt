@@ -12,6 +12,8 @@ dessus.
 Les liens :
     suppression en cliquant sur le (-) qui precede les liens.
     modification en cliquant sur le (#) qui precede les liens.
+    Les informations du lien apparaissent séparé par _|_ :
+        exemple Nom du lien_|_ Url
 
 ###La barre de recherche
 Par defaut la recherche va etre faite sur google.
@@ -29,9 +31,10 @@ Exemple :
 - ajout de raccourcis supplementaire
 
 ##Pre-requis
-JQUERY : 1.5
+JQUERY : 1.9.1
+JQUERY-UI : 1.10.0
 TAFFYDB : 2.6.2
 
-##Support
+##Testé sur :
 Firefox : 18.0.1
 
