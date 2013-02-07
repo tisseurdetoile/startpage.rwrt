@@ -2,6 +2,7 @@ startpage
 =========
 
 [FR]
+
 Voici une version personnalisé de startpage que j'avais découvert par lifehacker
 Cette version tire partie du localstorage avec taffyDB.
 
@@ -31,10 +32,10 @@ Exemple :
 - ajout de raccourcis supplementaire
 
 ##Pre-requis
-JQUERY : 1.9.1
-JQUERY-UI : 1.10.0
-TAFFYDB : 2.6.2
+- JQUERY : 1.9.1
+- JQUERY-UI : 1.10.0
+- TAFFYDB : 2.6.2
 
 ##Testé sur :
-Firefox : 18.0.1
+- Firefox : 18.0.1
 
