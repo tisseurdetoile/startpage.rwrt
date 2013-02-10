@@ -62,6 +62,67 @@ var system = {
     },
 
     /**
+     * Compare la version de la base actuelle avec la nouvelle
+     * @return {Boolean} 
+     */
+    needUpdate : function () {
+        console.log ("system_needUpdate");
+        
+        var defVer = defDatas[0];
+        
+        var curVer = system.datas({
+            type:system.VERSION
+        }).first();
+        
+        return (defVer.version > curVer.version);
+    },
+
+    /**
+     * routine de mise à jour des données
+     * nota pas plus de 10 version de difference en 1 coup.
+     */
+    update : function () {
+        console.log ("system_update");
+        
+        var loop = 10;
+        
+        while (system.needUpdate() && (loop > 0)) {
+            //console.log ("+" + loop);
+            
+            var curVer = system.datas({
+                type:system.VERSION
+            }).first().version;
+                
+            var ni = update.length;
+        
+            //console.log ("system_update" + " ni :" + ni);
+        
+            while (ni--) {
+                var upData = update[ni];
+            
+                //console.log ("system_update" + " to :" + upData.ver);
+                //console.log ("system_update" + " from :" + curVer);
+            
+                if (upData.ver === curVer) {
+                    //console.log ("system_update" + " update for :" + curVer);
+                
+                    var nj = upData.actions.length;
+                
+                    //console.log ("system_update" + " nj :" + nj);
+                
+                    while (nj--) {
+                        var action = upData.actions[nj];
+                        //console.log ("select :" + action.select + " mod  " + action.mod);
+                        system.datas(action.select).update(action.mod);
+                    }
+                }
+            }
+            loop--;
+        }
+        
+    },
+    
+    /**
      * charge les données dans le localstorage
      */
     loadData : function () {
@@ -75,8 +136,11 @@ var system = {
         if (boload) {
             if (system.datas().count() === 0) {
                 system.datas.merge (defDatas);
+            } else {
+                if (system.needUpdate()) {
+                    system.update();
+                }
             }
-        // TODO ici le system de merge
         }
     },
     

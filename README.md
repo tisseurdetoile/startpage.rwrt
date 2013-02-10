@@ -29,7 +29,6 @@ Exemple :
 
 ##TODO
 - affichage et modification du comportement de la barre de recherche
-- ajout de raccourcis supplementaire
 
 ##Pre-requis
 - JQUERY : 1.9.1

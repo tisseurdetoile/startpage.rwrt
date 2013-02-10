@@ -153,6 +153,7 @@ var defDatas = [
 
 ];
 
-var from1to2 = [ 
-    { select : { type : 0 }, mod : { version : 2,showclock : 1, clockPattern : "S[WW] [HH]:[MM]:[SS]"}}
+var update = [ 
+    // action for the update
+   { ver : 1, actions : [{ select : { type : 0 }, mod : { version : 2,showclock : true, clockPattern : "S[WW] [HH]:[MM]:[SS]"}}] }  
 ];
