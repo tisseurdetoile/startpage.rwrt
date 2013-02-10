@@ -91,9 +91,10 @@ var wBookMarks = {
                 buffer.push(wBookMarks.getLiForBookmark(bookmark));
             });
         
+            // Lien final d'ajout
             buffer.push('<li id="li_' + tabs.tabid + '" class="new">');
             buffer.push("<a href='Javascript:wBookMarks.createLink(\"" + tabs.tabid + "\")'>");
-            buffer.push('Ajouter');
+            buffer.push('<span class="ui-icon ui-icon-plusthick" style="display:inline-block;"></span>');
             buffer.push('</a>');
             buffer.push('</li>');
             buffer.push('</ul>');
@@ -145,10 +146,10 @@ var wBookMarks = {
         console.log ("wBookMarks_getLinkInList");
         linksbuff = [];
         linksbuff.push("<a href='Javascript:wBookMarks.removelink(\"" + bookmark.___id + "\")'>");
-        linksbuff.push('-');
+        linksbuff.push('<span class="ui-icon ui-icon-trash" style="display:inline-block;"></span>');
         linksbuff.push('</a>');                
         linksbuff.push("<a href='Javascript:wBookMarks.updateLink(\"" + bookmark.___id + "\")'>");
-        linksbuff.push('#');
+        linksbuff.push('<span class="ui-icon ui-icon-pencil" style="display:inline-block;"></span>');
         linksbuff.push('</a>');
         linksbuff.push('&nbsp;');
         linksbuff.push('<a href="');
